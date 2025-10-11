@@ -1,6 +1,8 @@
 const form = document.getElementById("time-form");
 const list = document.getElementById("entries-list");
 const chartCtx = document.getElementById("timeChart").getContext("2d");
+const periodSelect = document.getElementById("period");
+const exportBtn = document.getElementById("exportBtn");
 
 let entries = JSON.parse(localStorage.getItem("entries")) || [];
 
@@ -41,18 +43,14 @@ function deleteEntry(index) {
 }
 
 // --- Prépare les données du graphique ---
-const periodSelect = document.getElementById("period");
-
-// --- Prépare les données filtrées ---
 function prepareChartData() {
   let filteredEntries = [...entries];
-
   const period = periodSelect.value;
   const today = new Date();
 
   if (period === "week") {
     const firstDayOfWeek = new Date(today);
-    firstDayOfWeek.setDate(today.getDate() - today.getDay()); // dimanche
+    firstDayOfWeek.setDate(today.getDate() - today.getDay());
     filteredEntries = entries.filter((e) => new Date(e.date) >= firstDayOfWeek);
   } else if (period === "month") {
     const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -88,17 +86,10 @@ function prepareChartData() {
   return { dates, datasets };
 }
 
-// --- Écoute le changement de filtre ---
-periodSelect.addEventListener("change", updateChart);
-
-console.log("Données envoyées à Chart.js :", { dates, datasets });
-return { dates, datasets };
-
 // --- Met à jour le graphique ---
 function updateChart() {
   const { dates, datasets } = prepareChartData();
 
-  // Si pas de données, affiche un message
   if (!dates || dates.length === 0) {
     if (window.timeChart && typeof window.timeChart.destroy === "function") {
       window.timeChart.destroy();
@@ -109,17 +100,13 @@ function updateChart() {
     return;
   }
 
-  // ✅ Vérification importante avant de détruire l’ancien graphique
   if (window.timeChart && typeof window.timeChart.destroy === "function") {
     window.timeChart.destroy();
   }
 
   window.timeChart = new Chart(chartCtx, {
     type: "line",
-    data: {
-      labels: dates,
-      datasets: datasets,
-    },
+    data: { labels: dates, datasets: datasets },
     options: {
       responsive: true,
       plugins: {
@@ -133,21 +120,6 @@ function updateChart() {
     },
   });
 }
-
-const exportBtn = document.getElementById("exportBtn");
-
-exportBtn.addEventListener("click", () => {
-  const dataStr = JSON.stringify(entries, null, 2);
-  const blob = new Blob([dataStr], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `suivi_temps_${new Date().toISOString().split("T")[0]}.json`;
-  a.click();
-
-  URL.revokeObjectURL(url);
-});
 
 // --- Ajout d’une entrée ---
 form.addEventListener("submit", (e) => {
@@ -164,6 +136,23 @@ form.addEventListener("submit", (e) => {
   form.reset();
   updateList();
   updateChart();
+});
+
+// --- Filtre par période ---
+periodSelect.addEventListener("change", updateChart);
+
+// --- Export des données ---
+exportBtn.addEventListener("click", () => {
+  const dataStr = JSON.stringify(entries, null, 2);
+  const blob = new Blob([dataStr], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `suivi_temps_${new Date().toISOString().split("T")[0]}.json`;
+  a.click();
+
+  URL.revokeObjectURL(url);
 });
 
 // --- Initialisation ---
