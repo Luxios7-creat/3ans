@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suivi du temps</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <h1>Suivi de mon temps</h1>
+
+    <form id="time-form">
+      <label for="category">Catégorie :</label>
+      <select id="category" required>
+        <option value="travail">Travail / Études</option>
+        <option value="loisir">Loisir</option>
+        <option value="sport">Sport</option>
+        <option value="projet perso">Projet perso</option>
+        <option value="autre">Autre</option>
+      </select>
+
+      <label for="hours">Heures :</label>
+      <input type="number" id="hours" min="0" step="0.25" required />
+
+      <label for="date">Date :</label>
+      <input type="date" id="date" required />
+
+      <button type="submit">Ajouter</button>
+    </form>
+
+    <section id="entries">
+      <h2>Mes entrées</h2>
+      <ul id="entries-list"></ul>
+    </section>
+
+    <section id="filter">
+      <h2>Filtrer les données</h2>
+      <label for="period">Période :</label>
+      <select id="period">
+        <option value="all">Tout</option>
+        <option value="week">Cette semaine</option>
+        <option value="month">Ce mois</option>
+      </select>
+    </section>
+
+    <section id="stats">
+      <h2>Statistiques</h2>
+      <canvas id="timeChart" width="600" height="300"></canvas>
+    </section>
+
+    <!-- Chart.js doit être chargé AVANT ton script -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+
+    <button id="exportBtn">💾 Exporter les données</button>
+  </body>
+</html>
