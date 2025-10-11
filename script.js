@@ -154,6 +154,36 @@ exportBtn.addEventListener("click", () => {
 
   URL.revokeObjectURL(url);
 });
+const importBtn = document.getElementById("importBtn");
+const importFile = document.getElementById("importFile");
+
+importBtn.addEventListener("click", () => {
+  importFile.click(); // ouvre le dialogue de fichier
+});
+
+importFile.addEventListener("change", (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    try {
+      const importedData = JSON.parse(e.target.result);
+      if (!Array.isArray(importedData)) throw new Error("Format invalide");
+
+      // Fusionner les nouvelles données avec les existantes
+      entries = entries.concat(importedData);
+      localStorage.setItem("entries", JSON.stringify(entries));
+
+      updateList();
+      updateChart();
+      alert("Import réussi !");
+    } catch (err) {
+      alert("Erreur lors de l'import : " + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
 
 // --- Initialisation ---
 updateList();
