@@ -35,7 +35,7 @@ function verifier() {
   const nom = document.getElementById("nom").value.toLowerCase();
   const motPasse = document.getElementById("password").value;
 
-  const bonNom = "prenom"; // mets son prénom
+  const bonNom = "sarah"; // mets son prénom
   const bonMotDePasse = "1096";
 
   if (nom === bonNom && motPasse === bonMotDePasse) {
@@ -44,10 +44,10 @@ function verifier() {
     setTimeout(() => {
       document.getElementById("contenu").classList.remove("cache");
       document.getElementById("login").classList.add("cache");
-
-      document.getElementById("dateRelation").textContent = "1096 jours ❤️";
     }, 2000);
   } else {
-    alert("Indice : combien de jours se sont écoulés depuis notre rencontre ?");
+    alert(
+      "Combien de jours ce sont écoulés, (attention 2024 est une anné bissextile).",
+    );
   }
 }
