@@ -36,7 +36,7 @@ function verifier() {
   const motPasse = document.getElementById("password").value;
 
   const bonNom = "sarah";
-  const bonNom1 = "sarah "
+  const bonNom1 = "sarah ";
   const bonMotDePasse = "1096";
 
   if ((nom === bonNom || nom === bonNom1) && motPasse === bonMotDePasse) {
