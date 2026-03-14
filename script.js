@@ -34,7 +34,7 @@ function explosionCoeurs() {
 function verifier() {
   const nom = document.getElementById("nom").value.toLowerCase();
   const motPasse = document.getElementById("password").value;
-
+  consol.log(nom);
   const bonNom = "sarah";
   const bonNom1 = "sarah ";
   const bonMotDePasse = "1096";
